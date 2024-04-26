@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../sources/yolov8"
+		}
+	],
+	"settings": {
+		"terminal.integrated.env.linux": {
+			"PYTHONPATH": "${workspaceFolder}:${workspaceFolder}/../../sources/yolov8"
+		}
+	}
+}

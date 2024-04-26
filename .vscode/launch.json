@@ -1,0 +1,38 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python 调试程序: 当前文件",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {
+                "MODEL_WORKING_MODE": "1",
+                "HP_EPOCHES": "20",
+                "HP_BATCH_SIZE": "4",
+                "HP_LEARNING_RATE": "0.01",
+                "HP_WEIGHT_DECAY": "0.0005",
+                "HP_MOMENTUN": "0.937",
+                "HP_CONFIDENCE": "0.85"
+            }
+        },
+        {
+            "name": "Python start_det.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "start_det.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python test.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "test.py",
+            "console": "integratedTerminal"
+        }
+    ]
+}

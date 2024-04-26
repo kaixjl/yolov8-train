@@ -1,0 +1,7 @@
+/weight
+/dataset/*/user_validation/output
+*.bak
+*.bak.d/
+*.local
+*.local.d/
+/*.tgz

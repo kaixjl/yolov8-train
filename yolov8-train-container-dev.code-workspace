@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../../usr/src/ultralytics"
+		},
+		{
+			"path": "../../../dataset"
+		},
+		{
+			"path": "../../../weight"
+		},
+		{
+			"path": "../../../tmp/dataset"
+		},
+		{
+			"path": "../../../tmp/run"
+		}
+	],
+	"settings": {}
+}
