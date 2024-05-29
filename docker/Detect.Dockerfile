@@ -1,5 +1,8 @@
-# FROM ppyoloe1:8.0
 FROM ultralytics/ultralytics
+
+# pull yolov8 modified by rockchip.
+RUN git clone https://github.com/airockchip/ultralytics_yolov8 /usr/src/yolov8-rk
+ENV PYTHONPATH=/usr/src/yolov8-rk
 
 # 标志接受数据集的类型, 可以接受：image, video, pointcloud, audio。
 ENV MODEL_DATA_TYPE=image

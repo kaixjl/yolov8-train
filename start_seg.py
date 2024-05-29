@@ -157,9 +157,10 @@ def train():
                 lr0=HP_LEARNING_RATE,
                 weight_decay=HP_WEIGHT_DECAY,
                 momentum=HP_MOMENTUN)
-    # model.export()
+    model.export()
     os.system("mkdir -p /weight/output")
     os.system("cp /tmp/run/train/weights/best.pt /weight/output")
+    os.system("cp /tmp/run/train/weights/best.onnx /weight/output")
 
 def val():
     global mode, model

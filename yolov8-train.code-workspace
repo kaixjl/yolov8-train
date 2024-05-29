@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../sources/yolov8"
+		},
+		{
+			"path": "../../sources/yolov8-rk"
 		}
 	],
 	"settings": {
