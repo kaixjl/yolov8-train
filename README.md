@@ -39,6 +39,13 @@
 | /weight | 模型文件目录，具体参考`Dockerfile标准-*.pdf` |
 | /dataset | 数据集目录，具体参考`Dockerfile标准-*.pdf` |
 
+在`MODEL_WORKING_MODE==5`时，需要挂载如下目录：
+
+| 镜像内目录 | 说明 |
+| -- | -- |
+| /weight/output | 模型文件目录，具体参考`Dockerfile标准-*.pdf` |
+| /dataset | 数据集目录，具体参考`Dockerfile标准-*.pdf` |
+
 # 修订
 
 参考`CHANGELOG.md`。
