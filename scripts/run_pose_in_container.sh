@@ -2,7 +2,6 @@
 
 # run this script in parent folder which contains folders 'docker' and 'scripts'.
 
-# IMAGE_TAG=34d769ea094a
 IMAGE_TAG=yolov8-pose-train
 docker run --gpus all --ipc host -it --rm \
     -e MODEL_WORKING_MODE=1 \
@@ -14,4 +13,4 @@ docker run --gpus all --ipc host -it --rm \
     -e HP_CONFIDENCE=0.85 \
     -v ./weight/pose:/weight \
     -v ./dataset/coco8-pose:/dataset \
-    ${IMAGE_TAG} # /bin/bash
+    ${IMAGE_TAG} $1

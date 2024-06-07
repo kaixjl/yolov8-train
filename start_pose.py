@@ -4,6 +4,7 @@ import contextlib
 from copy import copy
 from pathlib import Path
 import os
+import sys
 
 import cv2
 import numpy as np
@@ -14,6 +15,7 @@ from PIL import Image
 from ultralytics.engine.validator import BaseValidator
 from ultralytics.engine.trainer import BaseTrainer
 from ultralytics import RTDETR, YOLO
+from ultralytics.engine.results import Results
 
 
 epoch = 0
@@ -22,6 +24,7 @@ loss = 0
 # box_loss, cls_loss, dfl_loss = 0
 mode = "train"
 model = None # type: YOLO
+running_mode = 0
 
 
 def on_train_epoch_end(trainer):
@@ -78,59 +81,86 @@ def on_val_batch_end(validator):
     print("======")
 
 
-def prepare_dataset_3():
+def prepare_dataset_3(ssplits=["train", "test", "validation"], dsplits=["train", "test", "val"]):
+    # 在/tmp/dataset目录中准备数据集，目录结构如下
+    # /tmp/dataset
+    #   |- [images]
+    #   |  |- [train]
+    #   |  |- [val]
+    #   |  |- [test]
+    #   |- [labels]
+    #   |  |- [train]
+    #   |  |- [val]
+    #   |  |- [test]
+    #   |- data.yaml
+    def check():
+        if not os.path.exists("/dataset/data.yaml"):
+            print("Cannot find /dataset/data.yaml.")
+            return False
+        for s in ssplits:
+            if not os.path.exists(f"/dataset/{s}/images") or not os.path.exists(f"/dataset/{s}/annotations"):
+                print(f"Cannot find /dataset/{s}/images or /dataset/{s}/annotations.")
+                return False
+        return True
+    
+    if not check(): return False
+
     os.system("rm -r /tmp/dataset")
     os.system("mkdir -p /tmp/dataset/images")
     os.system("mkdir -p /tmp/dataset/labels")
     with open("/dataset/data.yaml", "r") as f:
         data = yaml.load(f, Loader=yaml.SafeLoader)
     data["path"] = "/tmp/dataset"
-    data["train"] = []
-    data["val"] = []
-    data["test"] = []
+    data["train"] = "images/train"
+    data["val"] = "images/val"
+    data["test"] = "images/test"
 
-    for s in ["train", "test"]:
-        if not os.path.exists(f"/dataset/{s}/images") or not os.path.exists(f"/dataset/{s}/annotations"):
-            continue
-        os.system(f"mkdir -p /tmp/dataset/images/{s}")
-        os.system(f"ln -s /dataset/{s}/annotations /tmp/dataset/labels/{s}")
-        labels = os.listdir(f"/tmp/dataset/labels/{s}")
+    for s, t in zip(ssplits, dsplits):
+        os.system(f"mkdir -p /tmp/dataset/images/{t}")
+        os.system(f"ln -s /dataset/{s}/annotations /tmp/dataset/labels/{t}") # 创建labels目录的软链接
+        labels = os.listdir(f"/tmp/dataset/labels/{t}")
         ext = os.listdir(f"/dataset/{s}/images")[0][-4:]
         images = [f"{it[:-4]}{ext}" for it in labels]
         for it in images:
             if os.path.exists(f"/dataset/{s}/images/{it}"):
-                os.system(f"ln -s /dataset/{s}/images/{it} /tmp/dataset/images/{s}/")
-        data[s] = f"images/{s}"
-    while True:
-        if not os.path.exists(f"/dataset/validation/images") or not os.path.exists(f"/dataset/validation/annotations"):
-            continue
-        os.system(f"mkdir -p /tmp/dataset/images/val")
-        os.system(f"ln -s /dataset/validation/annotations /tmp/dataset/labels/val")
-        labels = os.listdir(f"/tmp/dataset/labels/val")
-        ext = os.listdir(f"/dataset/validation/images")[0][-4:]
-        images = [f"{it[:-4]}{ext}" for it in labels]
-        for it in images:
-            if os.path.exists(f"/dataset/validation/images/{it}"):
-                os.system(f"ln -s /dataset/validation/images/{it} /tmp/dataset/images/val/")
-        data["val"] = f"images/val"
-        break
+                os.system(f"ln -s /dataset/{s}/images/{it} /tmp/dataset/images/{t}/") # 创建图像文件的软链接
+        data[t] = f"images/{t}"
 
     with open("/tmp/dataset/data.yaml", "w") as f:
         yaml.dump(data, f)
+    
+    return True
 
 
 def create_model():
     global model
 
     print("Start creating model.")
-    pretrained = "yolov8n-pose.pt"
-    if os.path.exists("/weight/input") and os.path.isdir("/weight/input"):
-        pretraineds = os.listdir("/weight/input")
-        if len(pretraineds) > 0:
-            pretrained = os.path.join("/weight/input", pretraineds[0])
-    print(f"Use pretrained file '{pretrained}'")
 
-    model = YOLO(pretrained, task="pose")
+    model_path = ""
+    if running_mode == 1:
+        pretrained = "yolov8n-pose.pt"
+        if os.path.exists("/weight/input") and os.path.isdir("/weight/input"):
+            pretraineds = os.listdir("/weight/input")
+            if len(pretraineds) > 0:
+                pretrained = os.path.join("/weight/input", pretraineds[0])
+        model_path = pretrained
+        print(f"Use pretrained file '{pretrained}'")
+    elif running_mode == 4 or running_mode == 5:
+        if not os.path.exists("/weight/output"):
+            print("Cannot find output directory '/weight/output'", file=sys.stderr)
+            exit(1)
+
+        model_paths = os.listdir("/weight/output")
+        model_paths = [ it for it in model_paths if it.endswith(".pt") ]
+        if len(model_paths) <= 0:
+            print("Cannot find output weight file in '/weight/output'", file=sys.stderr)
+            exit(1)
+
+        model_path = os.path.join("/weight/output", model_paths[0])
+        print(f"Use weight file '{model_path}'")
+
+    model = YOLO(model_path, task="pose")
     model.add_callback("on_val_end", on_val_end)
     model.add_callback("on_val_batch_end", on_val_batch_end)
     model.add_callback("on_train_epoch_end", on_train_epoch_end)
@@ -172,34 +202,21 @@ def val():
     model.val(split="test")
 
 
-def training_mode():
-    prepare_dataset_3()
-    create_model()
-    train()
-    val()
-
-
-def user_validation_mode():
-    import sys
-    WEIGHT = "/weight/output/best.pt"
+def user_validation():
+    global model
     INPUTS_DIR = "/dataset/user_validation/images"
     OUTPUTS_DIR = "/dataset/user_validation/output"
     HP_CONFIDENCE = float(os.environ["HP_CONFIDENCE"])
 
-    if not os.path.exists(WEIGHT):
-        print("Cannot find output weight file '/weight/output/best.pt'", file=sys.stderr)
-        exit(1)
-
     os.system(f"rm {OUTPUTS_DIR}/*")
     os.system(f"mkdir -p {OUTPUTS_DIR}")
-    model = YOLO(WEIGHT, task="pose")
-    results = model(INPUTS_DIR, conf=HP_CONFIDENCE)
+    results = model(INPUTS_DIR, conf=HP_CONFIDENCE) # type: list[Results]
     for result in results:
         boxes = result.boxes  # Boxes object for bounding box outputs
         masks = result.masks  # Masks object for segmentation masks outputs
         keypoints = result.keypoints  # Keypoints object for pose outputs
         probs = result.probs  # Probs object for classification outputs
-        result.save(filename=os.path.join(OUTPUTS_DIR, os.path.basename(result.path)))  # save to disk
+        cv2.imwrite(os.path.join(OUTPUTS_DIR, os.path.basename(result.path)), result.plot())
         # 结果文件中，每行为一个对象，每列分别为：
         #     1：类别
         #     2：置信度
@@ -215,7 +232,29 @@ def user_validation_mode():
                     " ".join(["{:.6f} {:.6f} {:.6f}".format(p[0], p[1], conf) for p, conf in zip(keypoints.xyn[i], keypoints.conf[i])]) ))
 
 
+def training_mode():
+    if not prepare_dataset_3(): exit(1)
+    create_model()
+    train()
+    val()
+
+
+def user_validation_mode():
+    create_model()
+    user_validation()
+
+
+def validation_mode():
+    """
+    running in validation mode.
+    """
+    if not prepare_dataset_3(ssplits=["test", "test", "test"], dsplits=["train", "val", "test"]): exit(1)
+    create_model()
+    val()
+
+
 def main():
+    global running_mode
     running_mode = int(os.environ["MODEL_WORKING_MODE"])
     if running_mode == 1:
         print("Run in training mode.")
@@ -223,6 +262,9 @@ def main():
     elif running_mode == 4:
         print("Run in user validation mode.")
         user_validation_mode()
+    elif running_mode == 5:
+        print("Run in validation mode.")
+        validation_mode()
     else:
         print("Image cannot run in modes other than training mode and user validation mode.")
 
