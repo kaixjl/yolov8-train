@@ -27,7 +27,7 @@ model = None # type: YOLO
 running_mode = 0
 
 
-def on_train_epoch_end(trainer):
+def on_fit_epoch_end(trainer):
     # type: (BaseTrainer) -> None
 
     global epoch, loss, mode
@@ -35,6 +35,10 @@ def on_train_epoch_end(trainer):
     epoch = trainer.epoch
     loss = trainer.loss.detach().cpu().item()
     # box_loss, cls_loss, dfl_loss = trainer.loss_items.detach().cpu()
+    print("===on_fit_epoch_end===")
+    if mode == "train":
+        print(f"Epoch: {epoch + 1} | train loss: {loss} | test accuracy: { trainer.metrics['metrics/precision(B)'] }")
+    print("=======")
 
 
 def on_val_end(validator):
@@ -45,10 +49,8 @@ def on_val_end(validator):
     if not (mode=="val" or mode=="train"): return
 
     stats = validator.get_stats()
-    print("======")
-    if mode == "train":
-        print(f"Epoch: {epoch + 1} | train loss: {loss} | test accuracy: { stats['metrics/precision(B)'] }")
-    elif mode == "val":
+    print("===on_val_end===")
+    if mode == "val":
         print("tested: {tested}, correct: {correct}, accuracy: {accuracy:.6f}, recall: {recall:.6f}, map50: {map50:.6f}, map50_95: {map50_95:.6f}".format(
             tested=validator.seen,
             correct=validator.seen,
@@ -68,7 +70,7 @@ def on_val_batch_end(validator):
     if not (mode=="val"): return
 
     stats = validator.get_stats()
-    print("======")
+    print("===on_val_batch_end===")
     if mode == "val":
         print("tested: {tested}, correct: {correct}, accuracy: {accuracy:.6f}, recall: {recall:.6f}, map50: {map50:.6f}, map50_95: {map50_95:.6f}".format(
             tested=validator.seen,
@@ -163,7 +165,7 @@ def create_model():
     model = YOLO(model_path, task="segment")
     model.add_callback("on_val_end", on_val_end)
     model.add_callback("on_val_batch_end", on_val_batch_end)
-    model.add_callback("on_train_epoch_end", on_train_epoch_end)
+    model.add_callback("on_fit_epoch_end", on_fit_epoch_end)
 
 
 def train():
