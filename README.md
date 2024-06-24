@@ -14,7 +14,7 @@
 
 | 环境变量 | 必填/可选 | 说明 |
 | -- | -- | -- |
-| MODEL_WORKING_MODE | 必填 | 整数；指示镜像的运行模式；可接受的值包括“1（训练模式），4（手动验证）” |
+| MODEL_WORKING_MODE | 必填 | 整数；指示镜像的运行模式；可接受的值包括“1（训练模式），4（手动验证），5（质检功能）” |
 
 在`MODEL_WORKING_MODE==1`时，需要如下环境变量：
 
@@ -25,6 +25,13 @@
 | HP_LEARNING_RATE | 必填 | 浮点数 |
 | HP_WEIGHT_DECAY | 必填 | 浮点数 |
 | HP_MOMENTUN | 必填 | 浮点数 |
+
+同时需要挂载如下目录：
+
+| 镜像内目录 | 说明 |
+| -- | -- |
+| /weight | 模型文件目录，具体参考`Dockerfile标准-*.pdf` |
+| /dataset | 数据集目录，具体参考`Dockerfile标准-*.pdf` |
 
 在`MODEL_WORKING_MODE==4`时，需要如下环境变量：
 
@@ -45,6 +52,10 @@
 | -- | -- |
 | /weight/output | 模型文件目录，具体参考`Dockerfile标准-*.pdf` |
 | /dataset | 数据集目录，具体参考`Dockerfile标准-*.pdf` |
+
+## 手动验证模式
+
+## 质检模式
 
 # 修订
 

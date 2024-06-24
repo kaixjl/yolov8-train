@@ -16,13 +16,13 @@ ENV MODEL_INFERENCE=false
 ENV USE_GPU=true
 
 # 声明镜像需要通过平台向用户请求哪些超参数；镜像运行后，可以直接通过这些环境变量反过来获取用户配置的超参数的值。
-ENV HP_EPOCHES numeric:[1,)
-ENV HP_BATCH_SIZE numeric:[1,)
-ENV HP_LEARNING_RATE numeric:(,)
-ENV HP_WEIGHT_DECAY numeric:(,)
-ENV HP_MOMENTUN numeric:(,)
+ENV HP_EPOCHES numeric:[1,):100
+ENV HP_BATCH_SIZE numeric:[1,):16
+ENV HP_LEARNING_RATE numeric:(,):0.01
+ENV HP_WEIGHT_DECAY numeric:(,):0.0005
+ENV HP_MOMENTUN numeric:(,):0.937
 # 手动验证时使用的置信度阈值
-ENV HP_CONFIDENCE numeric:(0,1)
+ENV HP_CONFIDENCE numeric:(0,1):0.7
 
 
 # 将入口脚本以及其他依赖文件导入镜像。

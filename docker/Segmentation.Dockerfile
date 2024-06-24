@@ -12,12 +12,12 @@ ENV MODEL_INFERENCE=false
 
 ENV USE_GPU=true
 
-ENV HP_EPOCHES numeric:[1,)
-ENV HP_BATCH_SIZE numeric:[1,)
-ENV HP_LEARNING_RATE numeric:(,)
-ENV HP_WEIGHT_DECAY numeric:(,)
-ENV HP_MOMENTUN numeric:(,)
-ENV HP_CONFIDENCE numeric:(0,1)
+ENV HP_EPOCHES numeric:[1,):100
+ENV HP_BATCH_SIZE numeric:[1,):16
+ENV HP_LEARNING_RATE numeric:(,):0.01
+ENV HP_WEIGHT_DECAY numeric:(,):0.0005
+ENV HP_MOMENTUN numeric:(,):0.937
+ENV HP_CONFIDENCE numeric:(0,1):0.7
 
 RUN mkdir -p /root/workspace/yolov8-train
 COPY start_seg.py /root/workspace/yolov8-train
