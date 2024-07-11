@@ -19,6 +19,11 @@ ENV HP_WEIGHT_DECAY numeric:(,):0.0005
 ENV HP_MOMENTUN numeric:(,):0.937
 ENV HP_CONFIDENCE numeric:(0,1):0.7
 
+
+# 镜像配置
+ENV UV_OUTPUT_ANNOTATED_IMAGE=false
+
+
 RUN mkdir -p /root/workspace/yolov8-train
 COPY start_seg.py /root/workspace/yolov8-train
 COPY yolov8n-seg.pt /root/workspace/yolov8-train

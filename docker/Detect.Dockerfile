@@ -25,6 +25,10 @@ ENV HP_MOMENTUN numeric:(,):0.937
 ENV HP_CONFIDENCE numeric:(0,1):0.7
 
 
+# 镜像配置
+ENV UV_OUTPUT_ANNOTATED_IMAGE=false
+
+
 # 将入口脚本以及其他依赖文件导入镜像。
 RUN mkdir -p /root/workspace/yolov8-train
 COPY start_det.py /root/workspace/yolov8-train
