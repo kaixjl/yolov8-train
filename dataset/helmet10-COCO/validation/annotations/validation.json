@@ -1,0 +1,54 @@
+{
+    "images": [
+        {
+            "file_name": "000005.jpg",
+            "height": 768.0,
+            "width": 1366.0,
+            "id": 6
+        },
+        {
+            "file_name": "000002.jpg",
+            "height": 768.0,
+            "width": 1366.0,
+            "id": 7
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 6348.0,
+            "iscrowd": 0,
+            "bbox": [
+                258.0,
+                211.0,
+                92.0,
+                69.0
+            ],
+            "category_id": 1,
+            "ignore": 0,
+            "image_id": 6,
+            "id": 7
+        },
+        {
+            "area": 3588.0,
+            "iscrowd": 0,
+            "bbox": [
+                1050.0,
+                179.0,
+                78.0,
+                46.0
+            ],
+            "category_id": 1,
+            "ignore": 0,
+            "image_id": 7,
+            "id": 8
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "none",
+            "id": 1,
+            "name": "helmet"
+        }
+    ]
+}

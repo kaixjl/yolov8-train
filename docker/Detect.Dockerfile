@@ -26,7 +26,7 @@ ENV HP_CONFIDENCE numeric:(0,1):0.7
 
 
 # 镜像配置
-ENV UV_OUTPUT_ANNOTATED_IMAGE=false
+ENV IMGCFG_UV_OUTPUT_ANNOTATED_IMAGE=false
 
 
 # 将入口脚本以及其他依赖文件导入镜像。

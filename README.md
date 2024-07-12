@@ -1,14 +1,14 @@
 # 说明
 
-本代码中包含构建yolov8检测、分割镜像的文件，数据集目录结构参考Dockerfile标准-\*.pdf文件。
+本代码中包含构建用于YOLO数据集、COCO数据集、VOC数据集的yolov8检测镜像和用于YOLO数据集的分割镜像的文件，数据集目录结构参考Dockerfile标准-\*.pdf文件。
 
 # 构建
 
-可通过在根目录（包含`scripts/`, `docker/`等的目录）中调用`scripts`目录中的脚本`build_detection_image.sh`, `build_segmentation_image.sh`分别构建yolov8检测、分割镜像，`build_all_image.sh`可构建全部三种镜像。
+可通过在根目录（包含`scripts/`, `docker/`等的目录）中调用`scripts`目录中的脚本`build_detection_image.sh`, `build_segmentation_image.sh`, `build_coco_det_image.sh`, `build_voc_det_image.sh`分别构建yolov8检测镜像、yolov8分割镜像、用于COCO数据集的yolov8检测镜像、用于VOC数据集的yolov8检测镜像，`build_all_image.sh`可构建全部三种镜像。
 
 # 运行
 
-可通过在根目录（包含`scripts/`, `docker/`等的目录）中调用`scripts`目录中的脚本`run_det_in_container.sh`, `run_seg_in_container.sh`分别构建yolov8检测、分割镜像。
+可通过在根目录（包含`scripts/`, `docker/`等的目录）中调用`scripts`目录中的脚本`run_det_in_container.sh`, `run_seg_in_container.sh`, `run_coco_det_in_container.sh`, `run_voc_det_in_container.sh`分别构建yolov8检测、分割镜像。
 
 镜像需要输入如下环境变量：
 

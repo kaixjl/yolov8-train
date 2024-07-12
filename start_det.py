@@ -220,7 +220,7 @@ def user_validation():
     INPUTS_DIR = "/dataset/user_validation/images"
     OUTPUTS_DIR = "/dataset/user_validation/output"
     HP_CONFIDENCE = float(os.environ["HP_CONFIDENCE"])
-    UV_OUTPUT_ANNOTATED_IMAGE = True if os.environ["UV_OUTPUT_ANNOTATED_IMAGE"].upper() == "TRUE" else False
+    IMGCFG_UV_OUTPUT_ANNOTATED_IMAGE = True if os.environ["IMGCFG_UV_OUTPUT_ANNOTATED_IMAGE"].upper() == "TRUE" else False
 
     os.system(f"rm {OUTPUTS_DIR}/*")
     os.system(f"mkdir -p {OUTPUTS_DIR}")
@@ -230,7 +230,7 @@ def user_validation():
         masks = result.masks  # Masks object for segmentation masks outputs
         keypoints = result.keypoints  # Keypoints object for pose outputs
         probs = result.probs  # Probs object for classification outputs
-        if UV_OUTPUT_ANNOTATED_IMAGE:
+        if IMGCFG_UV_OUTPUT_ANNOTATED_IMAGE:
             cv2.imwrite(os.path.join(OUTPUTS_DIR, os.path.basename(result.path)), result.plot())
         # 结果文件中，每行为一个对象，每列分别为：
         #     1：类别

@@ -1,0 +1,134 @@
+{
+    "images": [
+        {
+            "file_name": "000003.jpg",
+            "height": 768.0,
+            "width": 1366.0,
+            "id": 0
+        },
+        {
+            "file_name": "000006.jpg",
+            "height": 768.0,
+            "width": 1366.0,
+            "id": 1
+        },
+        {
+            "file_name": "000004.jpg",
+            "height": 768.0,
+            "width": 1366.0,
+            "id": 2
+        },
+        {
+            "file_name": "000007.jpg",
+            "height": 768.0,
+            "width": 1366.0,
+            "id": 3
+        },
+        {
+            "file_name": "000001.jpg",
+            "height": 768.0,
+            "width": 1366.0,
+            "id": 4
+        },
+        {
+            "file_name": "000009.jpg",
+            "height": 768.0,
+            "width": 1366.0,
+            "id": 5
+        }
+    ],
+    "type": "instances",
+    "annotations": [
+        {
+            "area": 9792.0,
+            "iscrowd": 0,
+            "bbox": [
+                478.0,
+                262.0,
+                102.0,
+                96.0
+            ],
+            "category_id": 1,
+            "ignore": 0,
+            "image_id": 0,
+            "id": 1
+        },
+        {
+            "area": 6630.0,
+            "iscrowd": 0,
+            "bbox": [
+                394.0,
+                200.0,
+                85.0,
+                78.0
+            ],
+            "category_id": 1,
+            "ignore": 0,
+            "image_id": 1,
+            "id": 2
+        },
+        {
+            "area": 9072.0,
+            "iscrowd": 0,
+            "bbox": [
+                430.0,
+                239.0,
+                108.0,
+                84.0
+            ],
+            "category_id": 1,
+            "ignore": 0,
+            "image_id": 2,
+            "id": 3
+        },
+        {
+            "area": 870.0,
+            "iscrowd": 0,
+            "bbox": [
+                430.0,
+                93.0,
+                30.0,
+                29.0
+            ],
+            "category_id": 1,
+            "ignore": 0,
+            "image_id": 3,
+            "id": 4
+        },
+        {
+            "area": 6596.0,
+            "iscrowd": 0,
+            "bbox": [
+                569.0,
+                218.0,
+                97.0,
+                68.0
+            ],
+            "category_id": 1,
+            "ignore": 0,
+            "image_id": 4,
+            "id": 5
+        },
+        {
+            "area": 126.0,
+            "iscrowd": 0,
+            "bbox": [
+                489.0,
+                36.0,
+                14.0,
+                9.0
+            ],
+            "category_id": 1,
+            "ignore": 0,
+            "image_id": 5,
+            "id": 6
+        }
+    ],
+    "categories": [
+        {
+            "supercategory": "none",
+            "id": 1,
+            "name": "helmet"
+        }
+    ]
+}

@@ -21,7 +21,7 @@ ENV HP_CONFIDENCE numeric:(0,1):0.7
 
 
 # 镜像配置
-ENV UV_OUTPUT_ANNOTATED_IMAGE=false
+ENV IMGCFG_UV_OUTPUT_ANNOTATED_IMAGE=false
 
 
 RUN mkdir -p /root/workspace/yolov8-train
