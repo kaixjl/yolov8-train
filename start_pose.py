@@ -95,6 +95,10 @@ def prepare_dataset_3(ssplits=["train", "test", "validation"], dsplits=["train",
     #   |  |- [val]
     #   |  |- [test]
     #   |- data.yaml
+
+    print("===prepare_dataset_3===")
+    print("Preparing dataset...")
+
     def check():
         if not os.path.exists("/dataset/data.yaml"):
             print("Cannot find /dataset/data.yaml.")
@@ -107,7 +111,7 @@ def prepare_dataset_3(ssplits=["train", "test", "validation"], dsplits=["train",
     
     if not check(): return False
 
-    os.system("rm -r /tmp/dataset")
+    os.system("rm -rf /tmp/dataset")
     os.system("mkdir -p /tmp/dataset/images")
     os.system("mkdir -p /tmp/dataset/labels")
     with open("/dataset/data.yaml", "r") as f:
@@ -121,12 +125,17 @@ def prepare_dataset_3(ssplits=["train", "test", "validation"], dsplits=["train",
         os.system(f"mkdir -p /tmp/dataset/images/{t}")
         os.system(f"ln -s /dataset/{s}/annotations /tmp/dataset/labels/{t}") # 创建labels目录的软链接
         labels = os.listdir(f"/tmp/dataset/labels/{t}")
-        ext = os.listdir(f"/dataset/{s}/images")[0][-4:]
-        images = [f"{it[:-4]}{ext}" for it in labels]
+        imagefiles = os.listdir(f"/dataset/{s}/images")
+        exts = dict([os.path.splitext(it) for it in imagefiles])
+        images = [f"{it[:-4]}{exts[it[:-4]]}" for it in labels]
+        n_images = 0
         for it in images:
             if os.path.exists(f"/dataset/{s}/images/{it}"):
                 os.system(f"ln -s /dataset/{s}/images/{it} /tmp/dataset/images/{t}/") # 创建图像文件的软链接
+                n_images += 1
         data[t] = f"images/{t}"
+        print(f"Got {n_images} images and {len(labels)} labels in {t} split.")
+
 
     with open("/tmp/dataset/data.yaml", "w") as f:
         yaml.dump(data, f)
@@ -137,6 +146,7 @@ def prepare_dataset_3(ssplits=["train", "test", "validation"], dsplits=["train",
 def create_model():
     global model
 
+    print("===create_model===")
     print("Start creating model.")
 
     model_path = ""
@@ -177,9 +187,10 @@ def train():
     HP_WEIGHT_DECAY = float(os.environ["HP_WEIGHT_DECAY"])
     HP_MOMENTUN = float(os.environ["HP_MOMENTUN"])
 
+    print("===train===")
     mode = "train"
     print("Start training model.")
-    os.system("rm -r /tmp/run/*")
+    os.system("rm -rf /tmp/run/*")
     os.system("mkdir -p /tmp/run")
     model.train(data="/tmp/dataset/data.yaml",
                 project="/tmp/run",
