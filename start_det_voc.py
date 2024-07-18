@@ -99,17 +99,17 @@ def parse_voc_annotations(anno_dir):
         root = tree.getroot()
         filename = root.find("filename").text
         size = root.find("size")
-        width = int(size.find("width").text)
-        height = int(size.find("height").text)
+        width = float(size.find("width").text)
+        height = float(size.find("height").text)
 
         annotations = [] # type: list[AnnoInfo]
         for object in root.iter("object"):
             name = object.find("name").text
             bndbox = object.find("bndbox")
-            xmin = int(bndbox.find("xmin").text)
-            ymin = int(bndbox.find("ymin").text)
-            xmax = int(bndbox.find("xmax").text)
-            ymax = int(bndbox.find("ymax").text)
+            xmin = float(bndbox.find("xmin").text)
+            ymin = float(bndbox.find("ymin").text)
+            xmax = float(bndbox.find("xmax").text)
+            ymax = float(bndbox.find("ymax").text)
             bwidth = xmax - xmin
             bheight = ymax - ymin
             annotations.append(AnnoInfo([xmin, ymin, bwidth, bheight], CatInfo(name)))
@@ -237,6 +237,7 @@ def train():
     HP_LEARNING_RATE = float(os.environ["HP_LEARNING_RATE"])
     HP_WEIGHT_DECAY = float(os.environ["HP_WEIGHT_DECAY"])
     HP_MOMENTUN = float(os.environ["HP_MOMENTUN"])
+    HP_PATIENCE = int(os.environ["HP_PATIENCE"])
 
     print("===train===")
     mode = "train"
@@ -250,7 +251,8 @@ def train():
                 batch=HP_BATCH_SIZE,
                 lr0=HP_LEARNING_RATE,
                 weight_decay=HP_WEIGHT_DECAY,
-                momentum=HP_MOMENTUN)
+                momentum=HP_MOMENTUN,
+                patience=HP_PATIENCE)
     model.export()
     os.system("mkdir -p /weight/output")
     os.system("cp /tmp/run/train/weights/best.pt /weight/output")

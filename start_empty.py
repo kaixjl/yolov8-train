@@ -88,6 +88,7 @@ def train():
     HP_LEARNING_RATE = float(os.environ["HP_LEARNING_RATE"])
     HP_WEIGHT_DECAY = float(os.environ["HP_WEIGHT_DECAY"])
     HP_MOMENTUN = float(os.environ["HP_MOMENTUN"])
+    HP_PATIENCE = int(os.environ["HP_PATIENCE"])
 
     print("===train===")    
     

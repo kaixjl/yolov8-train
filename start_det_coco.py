@@ -222,6 +222,7 @@ def train():
     HP_LEARNING_RATE = float(os.environ["HP_LEARNING_RATE"])
     HP_WEIGHT_DECAY = float(os.environ["HP_WEIGHT_DECAY"])
     HP_MOMENTUN = float(os.environ["HP_MOMENTUN"])
+    HP_PATIENCE = int(os.environ["HP_PATIENCE"])
 
     print("===train===")
     mode = "train"
@@ -235,7 +236,8 @@ def train():
                 batch=HP_BATCH_SIZE,
                 lr0=HP_LEARNING_RATE,
                 weight_decay=HP_WEIGHT_DECAY,
-                momentum=HP_MOMENTUN)
+                momentum=HP_MOMENTUN,
+                patience=HP_PATIENCE)
     model.export()
     os.system("mkdir -p /weight/output")
     os.system("cp /tmp/run/train/weights/best.pt /weight/output")

@@ -12,12 +12,13 @@ ENV MODEL_INFERENCE=false
 
 ENV USE_GPU=true
 
-ENV HP_EPOCHES numeric:[1,):100
-ENV HP_BATCH_SIZE numeric:[1,):16
-ENV HP_LEARNING_RATE numeric:(,):0.01
-ENV HP_WEIGHT_DECAY numeric:(,):0.0005
-ENV HP_MOMENTUN numeric:(,):0.937
-ENV HP_CONFIDENCE numeric:(0,1):0.7
+ENV HP_EPOCHES=numeric:[1,):100
+ENV HP_BATCH_SIZE=numeric:[1,):16
+ENV HP_LEARNING_RATE=numeric:(,):0.01
+ENV HP_WEIGHT_DECAY=numeric:(,):0.0005
+ENV HP_MOMENTUN=numeric:(,):0.937
+ENV HP_CONFIDENCE=numeric:(0,1):0.7
+ENV HP_PATIENCE=numeric:[0,):50:当连续多轮次没有提升，则提前停止训练；置0禁用该功能
 
 
 # 镜像配置
